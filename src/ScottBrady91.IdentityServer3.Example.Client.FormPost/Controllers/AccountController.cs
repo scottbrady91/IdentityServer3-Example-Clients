@@ -12,7 +12,7 @@ namespace ScottBrady91.IdentityServer3.Example.Client.FormPost.Controllers
     public sealed class AccountController : Controller
     {
         private const string ClientUri = @"https://localhost:44304";
-        private const string CallbackEndpoint = @"/account/signInCallback";
+        private const string CallbackEndpoint = ClientUri + @"/account/signInCallback";
         private const string IdServBaseUri = @"https://localhost:44300/core";
         private const string AuthorizeUri = IdServBaseUri + @"/connect/authorize";
         private const string LogoutUri = IdServBaseUri + @"/connect/endsession";
@@ -26,7 +26,7 @@ namespace ScottBrady91.IdentityServer3.Example.Client.FormPost.Controllers
                       "?client_id=implicitclient" +
                       "&response_type=id_token" +
                       "&scope=openid email profile" +
-                      "&redirect_uri=" + ClientUri + CallbackEndpoint +
+                      "&redirect_uri=" + CallbackEndpoint +
                       "&response_mode=form_post" +
                       "&state=" + state +
                       "&nonce=" + nonce;
