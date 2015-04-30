@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScottBrady91.IdentityServer3.Example.Client.FormPost", "ScottBrady91.IdentityServer3.Example.Client.FormPost\ScottBrady91.IdentityServer3.Example.Client.FormPost.csproj", "{53C05192-40A2-4279-A0BC-BDEC29C6DE87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScottBrady91.IdentityServer3.Example.Client.OWIN", "ScottBrady91.IdentityServer3.Example.Client.OWIN\ScottBrady91.IdentityServer3.Example.Client.OWIN.csproj", "{E653F4F5-1D18-4607-B3C7-074624F029DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{53C05192-40A2-4279-A0BC-BDEC29C6DE87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53C05192-40A2-4279-A0BC-BDEC29C6DE87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53C05192-40A2-4279-A0BC-BDEC29C6DE87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E653F4F5-1D18-4607-B3C7-074624F029DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E653F4F5-1D18-4607-B3C7-074624F029DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E653F4F5-1D18-4607-B3C7-074624F029DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E653F4F5-1D18-4607-B3C7-074624F029DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
