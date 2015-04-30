@@ -1,0 +1,13 @@
+﻿@model IEnumerable<System.Security.Claims.Claim>
+@{
+    ViewBag.Title = "Claims";
+}
+<h2>@ViewBag.Title.</h2>
+
+<dl>
+    @foreach (var claim in Model)
+    {
+        <dt>@claim.Type</dt>
+        <dd>@claim.Value</dd>
+    }
+</dl>

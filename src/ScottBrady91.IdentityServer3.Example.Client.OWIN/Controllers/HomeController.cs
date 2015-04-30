@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 
@@ -10,21 +8,19 @@ namespace ScottBrady91.IdentityServer3.Example.Client.OWIN.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return this.View();
         }
 
-        public ActionResult About()
+        [Authorize]
+        public ActionResult Claims()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            return this.View((this.User as ClaimsPrincipal).Claims);
         }
 
-        public ActionResult Contact()
+        public ActionResult Signout()
         {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            this.Request.GetOwinContext().Authentication.SignOut();
+            return this.Redirect("/Home/Claims");
         }
     }
 }
