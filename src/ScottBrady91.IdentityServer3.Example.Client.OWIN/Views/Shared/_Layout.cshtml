@@ -16,16 +16,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            @Html.ActionLink("Identity Server 3 Client", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("Identity Server 3 Client", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                <li>@Html.ActionLink("Claims", "Claims", "Home")</li>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li>@Html.ActionLink("Signout", "Signout", "Home")</li>
-                }
+                <li>@Html.ActionLink("SignIn", "SignIn", "Account")</li>
+                <li>@Html.ActionLink("SignOut", "SignOut", "Account")</li>
             </ul>
         </div>
     </div>

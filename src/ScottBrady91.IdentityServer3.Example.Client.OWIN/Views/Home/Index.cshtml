@@ -6,3 +6,27 @@
     <h1>Identity Server 3</h1>
     <p class="lead">OpenID Connect OWIN Example Client</p>
 </div>
+
+<div class="row">
+    <div class="col-md-10">
+        <h3>Identity</h3>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <p>
+                <dl>
+                    @foreach (var claim in System.Security.Claims.ClaimsPrincipal.Current.Claims)
+                    {
+                        <dt>@claim.Type</dt>
+                        <dd>@claim.Value</dd>
+                    }
+                </dl>
+            </p>
+        }
+        else
+        {
+            <p>
+                anonymous.
+            </p>
+        }
+    </div>
+</div>

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Identity Server 3 Form Post Example Client - Scott Brady</title>
     @Styles.Render("~/Content/css")
@@ -16,7 +16,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            @Html.ActionLink("Identity Server 3 Client", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("Identity Server 3 Client", "Index", "Home", new {area = ""}, new {@class = "navbar-brand"})
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -29,9 +29,9 @@
 </div>
 <div class="container body-content">
     @RenderBody()
-    <hr/>
+    <hr />
     <footer>
-        <p>@DateTime.Now.Year - Scott Brady</p>
+        <p>@DateTime.UtcNow.Year - Scott Brady</p>
     </footer>
 </div>
 
