@@ -45,12 +45,8 @@ namespace ScottBrady91.IdentityServer3.Example.Client.OWIN
                             AuthorizationCodeReceived = async n =>
                             {
                                 var identity = n.AuthenticationTicket.Identity;
-                                var sub = identity.FindFirst("sub");
-                                var roles = identity.FindAll("role");
 
                                 var nIdentity = new ClaimsIdentity(identity.AuthenticationType, "email", "role");
-                                nIdentity.AddClaim(sub);
-                                nIdentity.AddClaims(roles);
 
                                 var userInfoClient = new UserInfoClient(
                                     new Uri(UserInfoEndpoint),
@@ -69,7 +65,7 @@ namespace ScottBrady91.IdentityServer3.Example.Client.OWIN
                                 nIdentity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
 
                                 n.AuthenticationTicket = new AuthenticationTicket(
-                                    nIdentity,
+                                    nIdentity, 
                                     n.AuthenticationTicket.Properties);
                             },
                             RedirectToIdentityProvider = async n =>
