@@ -4,13 +4,14 @@ using System.Globalization;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web.Helpers;
+using IdentityModel.Client;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Owin;
-using Thinktecture.IdentityModel.Client;
 
 namespace ScottBrady91.IdentityServer3.Example.Client.OWIN
 {
@@ -24,7 +25,6 @@ namespace ScottBrady91.IdentityServer3.Example.Client.OWIN
         public void Configuration(IAppBuilder app)
         {
             AntiForgeryConfig.UniqueClaimTypeIdentifier = "sub";
-
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions { AuthenticationType = "Cookies" });
@@ -38,43 +38,45 @@ namespace ScottBrady91.IdentityServer3.Example.Client.OWIN
                     PostLogoutRedirectUri = ClientUri,
                     ResponseType = "code id_token token",
                     Scope = "openid profile email roles offline_access",
+                    TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "name",
+                        RoleClaimType = "role"
+                    },
                     SignInAsAuthenticationType = "Cookies",
                     Notifications =
                         new OpenIdConnectAuthenticationNotifications
                         {
                             AuthorizationCodeReceived = async n =>
                             {
-                                var identity = n.AuthenticationTicket.Identity;
+                                var userInfoClient = new UserInfoClient(new Uri(UserInfoEndpoint), n.ProtocolMessage.AccessToken);
+                                var userInfoResponse = await userInfoClient.GetAsync();
 
-                                var nIdentity = new ClaimsIdentity(identity.AuthenticationType, "email", "role");
-
-                                var userInfoClient = new UserInfoClient(
-                                    new Uri(UserInfoEndpoint),
-                                    n.ProtocolMessage.AccessToken);
-
-                                var userInfo = await userInfoClient.GetAsync();
-                                userInfo.Claims.ToList().ForEach(x => nIdentity.AddClaim(new Claim(x.Item1, x.Item2)));
-
-                                var tokenClient = new OAuth2Client(new Uri(TokenEndpoint), "hybridclient", "idsrv3test");
+                                var identity = new ClaimsIdentity(n.AuthenticationTicket.Identity.AuthenticationType);
+                                identity.AddClaims(userInfoResponse.GetClaimsIdentity().Claims);
+                               
+                                var tokenClient = new TokenClient(TokenEndpoint, "hybridclient", "idsrv3test");
                                 var response = await tokenClient.RequestAuthorizationCodeAsync(n.Code, n.RedirectUri);
 
-                                nIdentity.AddClaim(new Claim("access_token", response.AccessToken));
-                                nIdentity.AddClaim(
+                                identity.AddClaim(new Claim("access_token", response.AccessToken));
+                                identity.AddClaim(
                                     new Claim("expires_at", DateTime.UtcNow.AddSeconds(response.ExpiresIn).ToLocalTime().ToString(CultureInfo.InvariantCulture)));
-                                nIdentity.AddClaim(new Claim("refresh_token", response.RefreshToken));
-                                nIdentity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
+                                identity.AddClaim(new Claim("refresh_token", response.RefreshToken));
+                                identity.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
 
                                 n.AuthenticationTicket = new AuthenticationTicket(
-                                    nIdentity, 
+                                    identity, 
                                     n.AuthenticationTicket.Properties);
                             },
-                            RedirectToIdentityProvider = async n =>
+                            RedirectToIdentityProvider = n =>
                             {
                                 if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.LogoutRequest)
                                 {
                                     var idTokenHint = n.OwinContext.Authentication.User.FindFirst("id_token").Value;
                                     n.ProtocolMessage.IdTokenHint = idTokenHint;
                                 }
+
+                                return Task.FromResult(0);
                             }
                         }
                 });
